@@ -1,0 +1,16 @@
+drone_id,model,capabilities,current_assignment,status,location,maintenance_due_date,flight_hours,max_range_km
+D001,DJI Matrice 300 RTK,"Mapping,Surveying,LiDAR",M001,Deployed,Bangalore,2024-03-15,450,15
+D002,DJI Mavic 3 Thermal,"Thermal Imaging,Inspection",M003,Deployed,Pune,2024-04-20,320,20
+D003,DJI Agras T40,"Agricultural Monitoring,Spraying",,Available,Delhi,2024-05-10,180,12
+D004,Parrot Anafi USA,"Search and Rescue,Emergency Response",,Available,Mumbai,2024-02-28,520,25
+D005,DJI Inspire 3,"Film Production,Cinematography",M007,Deployed,Mumbai,2024-06-01,275,10
+D006,Autel EVO Max 4T,"Industrial Inspection,Thermal Imaging",M010,Deployed,Bangalore,2024-03-25,410,18
+D007,DJI Phantom 4 RTK,"Mapping,Surveying,Real Estate",,Maintenance,Chennai,2024-02-15,680,8
+D008,Freefly Alta X,"Film Production,Heavy Payload",,Available,Bangalore,2024-07-01,150,5
+D009,DJI Mavic 3 Enterprise,"Construction Monitoring,Inspection",,Available,Hyderabad,2024-04-10,290,25
+D010,senseFly eBee X,"Surveying,Mapping,Agricultural Monitoring",M015,Deployed,Jaipur,2024-03-30,380,60
+D011,DJI Matrice 30T,"Thermal Imaging,Search and Rescue",,Available,Kochi,2024-05-05,220,22
+D012,Yuneec H520E,"Industrial Inspection,Infrastructure",M018,Deployed,Chennai,2024-04-15,340,15
+D013,DJI Mini 3 Pro,"Aerial Photography,Real Estate",,Available,Pune,2024-06-20,95,10
+D014,Skydio X2,"Infrastructure,Powerline Inspection",M022,Deployed,Bangalore,2024-03-10,465,5
+D015,DJI Air 3,"Cinematography,Photography",,Available,Mumbai,2024-05-25,125,18
