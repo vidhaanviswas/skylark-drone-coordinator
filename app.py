@@ -168,11 +168,11 @@ def main():
         
         # Quick actions
         st.subheader("Quick Actions")
-        if st.button("🔄 Refresh Data", width="stretch"):
+        if st.button("🔄 Refresh Data", use_container_width=True):
             st.cache_resource.clear()
             st.rerun()
         
-        if st.button("🚨 View All Conflicts", width="stretch"):
+        if st.button("🚨 View All Conflicts", use_container_width=True):
             st.session_state.show_conflicts = True
 
         def build_data_warnings():
@@ -349,7 +349,7 @@ def main():
                 }
                 for p in filtered_pilots
             ])
-            st.dataframe(df, width="stretch", hide_index=True)
+            st.dataframe(df, use_container_width=True, hide_index=True)
         else:
             st.info("No pilots match the selected filters.")
 
@@ -542,7 +542,7 @@ def main():
                 }
                 for d in filtered_drones
             ])
-            st.dataframe(df, width="stretch", hide_index=True)
+            st.dataframe(df, use_container_width=True, hide_index=True)
         else:
             st.info("No drones match the selected filters.")
 
@@ -705,7 +705,7 @@ def main():
                 }
                 for m in filtered_missions
             ])
-            st.dataframe(df, width="stretch", hide_index=True)
+            st.dataframe(df, use_container_width=True, hide_index=True)
         else:
             st.info("No missions match the selected status.")
 
