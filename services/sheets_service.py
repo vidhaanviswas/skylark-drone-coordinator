@@ -47,6 +47,7 @@ class SheetsService:
         
         self.service = None
         self.enabled = False
+        self.last_error = None
         
         # Priority: Streamlit secrets -> env
         if SECRETS:
@@ -76,7 +77,8 @@ class SheetsService:
                 self._initialize_service(self.credentials_json)
                 self.enabled = True
         except Exception as e:
-            print(f"Google Sheets integration disabled: {e}")
+            self.last_error = f"Google Sheets integration disabled: {e}"
+            print(self.last_error)
             self.enabled = False
 
     
@@ -110,6 +112,7 @@ class SheetsService:
             DataFrame with the data or None if failed
         """
         if not self.enabled or not self.service:
+            self.last_error = "Google Sheets service is not initialized."
             return None
         
         try:
@@ -121,6 +124,7 @@ class SheetsService:
             
             values = result.get('values', [])
             if not values:
+                self.last_error = f"Sheet '{sheet_name}' is empty or not found."
                 return None
             
             # First row is headers
@@ -138,7 +142,8 @@ class SheetsService:
             return df
         
         except HttpError as e:
-            print(f"Error reading sheet: {e}")
+            self.last_error = f"Error reading sheet '{sheet_name}': {e}"
+            print(self.last_error)
             return None
     
     def write_sheet(
@@ -159,6 +164,7 @@ class SheetsService:
             True if successful, False otherwise
         """
         if not self.enabled or not self.service:
+            self.last_error = "Google Sheets service is not initialized."
             return False
         
         try:
@@ -186,7 +192,8 @@ class SheetsService:
             return True
         
         except HttpError as e:
-            print(f"Error writing to sheet: {e}")
+            self.last_error = f"Error writing sheet '{sheet_name}': {e}"
+            print(self.last_error)
             return False
     
     def sync_pilots_from_sheets(self, pilot_service) -> bool:
@@ -200,6 +207,7 @@ class SheetsService:
             True if successful, False otherwise
         """
         if not self.enabled or not self.pilot_sheet_id:
+            self.last_error = "Pilot roster sheet ID is missing."
             return False
         
         df = self.read_sheet(self.pilot_sheet_id, self.pilot_sheet_name)
@@ -222,6 +230,7 @@ class SheetsService:
             True if successful, False otherwise
         """
         if not self.enabled or not self.pilot_sheet_id:
+            self.last_error = "Pilot roster sheet ID is missing."
             return False
         
         data = [pilot.to_dict() for pilot in pilot_service.get_all_pilots()]
@@ -239,6 +248,7 @@ class SheetsService:
             True if successful, False otherwise
         """
         if not self.enabled or not self.drone_sheet_id:
+            self.last_error = "Drone fleet sheet ID is missing."
             return False
         
         df = self.read_sheet(self.drone_sheet_id, self.drone_sheet_name)
@@ -261,6 +271,7 @@ class SheetsService:
             True if successful, False otherwise
         """
         if not self.enabled or not self.drone_sheet_id:
+            self.last_error = "Drone fleet sheet ID is missing."
             return False
         
         data = [drone.to_dict() for drone in drone_service.get_all_drones()]
@@ -278,6 +289,7 @@ class SheetsService:
             True if successful, False otherwise
         """
         if not self.enabled or not self.mission_sheet_id:
+            self.last_error = "Missions sheet ID is missing."
             return False
 
         df = self.read_sheet(self.mission_sheet_id, self.mission_sheet_name)
@@ -300,6 +312,7 @@ class SheetsService:
             True if successful, False otherwise
         """
         if not self.enabled or not self.mission_sheet_id:
+            self.last_error = "Missions sheet ID is missing."
             return False
         
         data = [mission.to_dict() for mission in mission_service.get_all_missions()]

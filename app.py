@@ -85,7 +85,8 @@ def initialize_services():
     drones_ok = sheets_service.sync_drones_from_sheets(drone_service)
     missions_ok = sheets_service.sync_missions_from_sheets(mission_service)
     if not (pilots_ok and drones_ok and missions_ok):
-        raise RuntimeError("Failed to load data from Google Sheets.")
+        detail = sheets_service.last_error or "Unknown error."
+        raise RuntimeError(f"Failed to load data from Google Sheets: {detail}")
     
     return pilot_service, drone_service, mission_service, conflict_detector, sheets_service
 
