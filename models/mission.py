@@ -24,6 +24,14 @@ class Mission:
     @classmethod
     def from_dict(cls, data: dict) -> 'Mission':
         """Create a Mission instance from a dictionary."""
+        # Normalize legacy/alternate column names from CSVs.
+        if 'mission_id' not in data and 'project_id' in data:
+            data['mission_id'] = data.get('project_id')
+        if 'client_name' not in data and 'client' in data:
+            data['client_name'] = data.get('client')
+        if 'required_certifications' not in data and 'required_certs' in data:
+            data['required_certifications'] = data.get('required_certs')
+
         # Parse required skills
         required_skills = []
         if isinstance(data.get('required_skills'), str):
@@ -42,6 +50,17 @@ class Mission:
         start_date = datetime.strptime(str(data['start_date']), '%Y-%m-%d')
         end_date = datetime.strptime(str(data['end_date']), '%Y-%m-%d')
         
+        priority_value = data.get('priority', 3)
+        if isinstance(priority_value, str):
+            priority_lookup = {
+                'urgent': 1,
+                'high': 2,
+                'standard': 3,
+                'medium': 3,
+                'low': 4
+            }
+            priority_value = priority_lookup.get(priority_value.strip().lower(), 3)
+
         return cls(
             mission_id=str(data['mission_id']),
             client_name=str(data['client_name']),
@@ -50,7 +69,7 @@ class Mission:
             required_certifications=required_certifications,
             start_date=start_date,
             end_date=end_date,
-            priority=int(data.get('priority', 3)),
+            priority=int(priority_value),
             assigned_pilot_id=data.get('assigned_pilot_id') or None,
             assigned_drone_id=data.get('assigned_drone_id') or None,
             status=str(data.get('status', 'Pending'))

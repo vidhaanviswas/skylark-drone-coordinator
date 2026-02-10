@@ -25,6 +25,14 @@ class Pilot:
     @classmethod
     def from_dict(cls, data: dict) -> 'Pilot':
         """Create a Pilot instance from a dictionary."""
+        # Normalize legacy/alternate column names from CSVs.
+        if 'availability_start_date' not in data and 'available_from' in data:
+            data['availability_start_date'] = data.get('available_from')
+        if 'availability_end_date' not in data and 'available_to' in data:
+            data['availability_end_date'] = data.get('available_to')
+        if data.get('current_assignment') in ['-', '–', '—', '']:
+            data['current_assignment'] = None
+
         # Parse skills and certifications
         skills = []
         if isinstance(data.get('skills'), str):

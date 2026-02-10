@@ -22,6 +22,12 @@ class Drone:
     @classmethod
     def from_dict(cls, data: dict) -> 'Drone':
         """Create a Drone instance from a dictionary."""
+        # Normalize legacy/alternate column names from CSVs.
+        if 'maintenance_due_date' not in data and 'maintenance_due' in data:
+            data['maintenance_due_date'] = data.get('maintenance_due')
+        if data.get('current_assignment') in ['-', '–', '—', '']:
+            data['current_assignment'] = None
+
         # Parse capabilities
         capabilities = []
         if isinstance(data.get('capabilities'), str):
