@@ -1,0 +1,21 @@
+pilot_id,name,skills,certifications,location,current_assignment,status,availability_start_date,availability_end_date,drone_experience_hours,priority_level,contact_info
+P001,Rajesh Kumar,"Aerial Photography,Mapping,Surveying","Part 107,Advanced Pilot",Bangalore,M001,Assigned,2024-01-01,2024-12-31,1200,1,rajesh.kumar@skylark.com
+P002,Priya Sharma,"Thermal Imaging,Industrial Inspection","Part 107,Thermography Level 2",Mumbai,,Available,2024-01-01,2024-12-31,850,2,priya.sharma@skylark.com
+P003,Amit Patel,"Agricultural Monitoring,Spraying","Part 107,Agricultural Specialist",Pune,M003,Assigned,2024-01-01,2024-12-31,650,2,amit.patel@skylark.com
+P004,Sneha Reddy,"3D Modeling,LiDAR Mapping","Part 107,Advanced Pilot,LiDAR Certified",Hyderabad,,Available,2024-01-01,2024-12-31,1500,1,sneha.reddy@skylark.com
+P005,Vikram Singh,"Search and Rescue,Emergency Response","Part 107,Emergency Operations",Delhi,,On Leave,2024-02-05,2024-02-20,900,3,vikram.singh@skylark.com
+P006,Anjali Desai,"Film Production,Cinematography","Part 107,Commercial Pilot",Mumbai,M007,Assigned,2024-01-01,2024-12-31,1100,2,anjali.desai@skylark.com
+P007,Karthik Naidu,"Construction Monitoring,Progress Tracking","Part 107",Chennai,,Available,2024-01-01,2024-12-31,450,3,karthik.naidu@skylark.com
+P008,Meera Iyer,"Powerline Inspection,Infrastructure","Part 107,Infrastructure Specialist",Bangalore,M010,Assigned,2024-01-01,2024-12-31,750,2,meera.iyer@skylark.com
+P009,Rohit Joshi,"Wildlife Monitoring,Conservation","Part 107",Pune,,Available,2024-01-01,2024-12-31,380,4,rohit.joshi@skylark.com
+P010,Deepika Rao,"Mining Survey,Volumetric Analysis","Part 107,Mining Specialist",Kolkata,,Available,2024-01-01,2024-12-31,620,3,deepika.rao@skylark.com
+P011,Arjun Mehta,"Real Estate,Architectural Photography","Part 107",Bangalore,,Available,2024-01-01,2024-12-31,550,3,arjun.mehta@skylark.com
+P012,Kavita Nair,"Disaster Assessment,Emergency Mapping","Part 107,Emergency Operations",Kochi,,Available,2024-01-01,2024-12-31,700,2,kavita.nair@skylark.com
+P013,Suresh Gupta,"Agricultural Monitoring,Mapping","Part 107",Jaipur,M015,Assigned,2024-01-01,2024-12-31,420,4,suresh.gupta@skylark.com
+P014,Neha Kapoor,"Thermal Imaging,Solar Panel Inspection","Part 107,Thermography Level 2",Delhi,,Unavailable,2024-01-01,2024-12-31,680,3,neha.kapoor@skylark.com
+P015,Ravi Krishnan,"Surveying,Mapping,LiDAR Mapping","Part 107,Advanced Pilot,LiDAR Certified",Chennai,M018,Assigned,2024-01-01,2024-12-31,1350,1,ravi.krishnan@skylark.com
+P016,Lakshmi Menon,"Industrial Inspection,Safety Monitoring","Part 107",Mumbai,,Available,2024-01-01,2024-12-31,480,4,lakshmi.menon@skylark.com
+P017,Aditya Verma,"Film Production,Aerial Photography","Part 107,Commercial Pilot",Bangalore,,Available,2024-01-01,2024-12-31,920,2,aditya.verma@skylark.com
+P018,Pooja Saxena,"Construction Monitoring,3D Modeling","Part 107",Hyderabad,,Available,2024-01-01,2024-12-31,560,3,pooja.saxena@skylark.com
+P019,Sanjay Pillai,"Powerline Inspection,Thermal Imaging","Part 107,Thermography Level 2,Infrastructure Specialist",Bangalore,M022,Assigned,2024-01-01,2024-12-31,890,2,sanjay.pillai@skylark.com
+P020,Divya Bhat,"Mapping,Surveying,Agricultural Monitoring","Part 107,Agricultural Specialist",Pune,,Available,2024-01-01,2024-12-31,640,3,divya.bhat@skylark.com
