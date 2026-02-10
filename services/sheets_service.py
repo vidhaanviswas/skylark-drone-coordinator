@@ -42,20 +42,20 @@ class SheetsService:
         self.enabled = False
         
         # Only initialize if credentials are available
-        if self.credentials_json:
-            try:
-                self._initialize_service(credentials_json=self.credentials_json)
-                self.enabled = True
-            except Exception as e:
-                print(f"Google Sheets integration disabled: {e}")
-                self.enabled = False
-        elif self.credentials_path and os.path.exists(self.credentials_path):
-            try:
-                self._initialize_service()
-                self.enabled = True
-            except Exception as e:
-                print(f"Google Sheets integration disabled: {e}")
-                self.enabled = False
+        self.credentials_path = credentials_path or os.getenv('GOOGLE_SHEETS_CREDENTIALS_PATH')
+
+        # Priority: Streamlit secrets → env
+        if SECRETS:
+            self.credentials_json = json.dumps(SECRETS.get("gcp_service_account", {}))
+            self.pilot_sheet_id = pilot_sheet_id or SECRETS.get("PILOT_ROSTER_SHEET_ID")
+            self.drone_sheet_id = SECRETS.get("DRONE_FLEET_SHEET_ID")
+            self.mission_sheet_id = SECRETS.get("MISSIONS_SHEET_ID")
+        else:
+            self.credentials_json = os.getenv('GOOGLE_SHEETS_CREDENTIALS_JSON')
+            self.pilot_sheet_id = pilot_sheet_id or os.getenv('PILOT_ROSTER_SHEET_ID')
+            self.drone_sheet_id = os.getenv('DRONE_FLEET_SHEET_ID')
+            self.mission_sheet_id = os.getenv('MISSIONS_SHEET_ID')
+
     
     def _initialize_service(self, credentials_json: Optional[str] = None):
         """Initialize the Google Sheets API service."""
