@@ -5,6 +5,8 @@ from typing import List, Optional
 from datetime import datetime
 from models.pilot import Pilot
 
+_UNSET = object()
+
 
 class PilotService:
     """Service for managing pilot roster operations."""
@@ -58,16 +60,18 @@ class PilotService:
         
         # Filter by skills
         if skills:
+            skills_lower = [skill.lower() for skill in skills]
             results = [
                 p for p in results
-                if all(skill in p.skills for skill in skills)
+                if all(skill in [s.lower() for s in p.skills] for skill in skills_lower)
             ]
         
         # Filter by certifications
         if certifications:
+            certs_lower = [cert.lower() for cert in certifications]
             results = [
                 p for p in results
-                if all(cert in p.certifications for cert in certifications)
+                if all(cert in [c.lower() for c in p.certifications] for cert in certs_lower)
             ]
         
         # Filter by location
@@ -91,7 +95,7 @@ class PilotService:
         self,
         pilot_id: str,
         status: str,
-        current_assignment: Optional[str] = None
+        current_assignment: Optional[str] = _UNSET
     ) -> bool:
         """
         Update pilot status.
@@ -109,7 +113,7 @@ class PilotService:
             return False
         
         pilot.status = status
-        if current_assignment is not None:
+        if current_assignment is not _UNSET:
             pilot.current_assignment = current_assignment
         
         return self.save_pilots()
@@ -132,10 +136,12 @@ class PilotService:
                 continue
             
             # Check availability dates if set
-            if pilot.availability_start_date and pilot.availability_end_date:
-                if (start_date >= pilot.availability_start_date and 
-                    end_date <= pilot.availability_end_date):
-                    available.append(pilot)
+            if pilot.availability_start_date or pilot.availability_end_date:
+                if pilot.availability_start_date and start_date < pilot.availability_start_date:
+                    continue
+                if pilot.availability_end_date and end_date > pilot.availability_end_date:
+                    continue
+                available.append(pilot)
             else:
                 # No date restrictions
                 available.append(pilot)

@@ -7,13 +7,13 @@
 pip install -r requirements.txt
 ```
 
-### Step 2: Set OpenAI API Key
+### Step 2: Set Google API Key
 ```bash
 # Create .env file
 cp .env.example .env
 
 # Edit .env and add your API key
-# OPENAI_API_KEY=sk-...
+# GOOGLE_API_KEY=your_key_here
 ```
 
 ### Step 3: Run the Application
@@ -63,8 +63,7 @@ Once the app is running, try these queries in the AI Assistant:
 
 Verify the system is working:
 ```bash
-python test_system.py
-python test_edge_cases.py
+pytest
 ```
 
 ---
@@ -74,7 +73,7 @@ python test_edge_cases.py
 Build and run with Docker:
 ```bash
 docker build -t skylark-drone-coordinator .
-docker run -p 8501:8501 -e OPENAI_API_KEY=your_key_here skylark-drone-coordinator
+docker run -p 8501:8501 -e GOOGLE_API_KEY=your_key_here skylark-drone-coordinator
 ```
 
 ---
@@ -127,8 +126,8 @@ When you need to reassign:
 
 ## 🆘 Troubleshooting
 
-**Problem**: "OpenAI API key not provided"
-**Solution**: Set `OPENAI_API_KEY` in `.env` file
+**Problem**: "Google API key not provided"
+**Solution**: Set `GOOGLE_API_KEY` in `.env` file
 
 **Problem**: Data not showing
 **Solution**: Click "Refresh Data" button in sidebar

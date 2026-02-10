@@ -2,7 +2,7 @@
 
 [![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
 [![Streamlit](https://img.shields.io/badge/streamlit-1.29-red.svg)](https://streamlit.io/)
-[![LangChain](https://img.shields.io/badge/langchain-0.1-green.svg)](https://www.langchain.com/)
+[![LangChain](https://img.shields.io/badge/langchain-0.2-green.svg)](https://www.langchain.com/)
 
 An AI-powered drone operations coordination system for Skylark Drones, handling pilot roster management, drone fleet tracking, mission assignments, and conflict detection.
 
@@ -28,7 +28,7 @@ The Skylark Drone Coordinator is a comprehensive AI agent system that helps mana
                      │
 ┌────────────────────▼────────────────────────────────────────┐
 │              LangChain AI Agent Layer                        │
-│  - OpenAI GPT-4      - Function Calling   - Chat History    │
+│  - Google Gemini     - Tool Routing      - Chat History    │
 │  - 14 Agent Tools    - Conflict Checking  - Smart Routing   │
 └────────────────────┬────────────────────────────────────────┘
                      │
@@ -50,7 +50,7 @@ The Skylark Drone Coordinator is a comprehensive AI agent system that helps mana
 ### Prerequisites
 
 - Python 3.9 or higher
-- OpenAI API key
+- Google AI Studio API key (Gemini)
 - (Optional) Google Sheets API credentials
 
 ### Local Setup
@@ -75,12 +75,12 @@ The Skylark Drone Coordinator is a comprehensive AI agent system that helps mana
 4. **Configure environment variables:**
    ```bash
    cp .env.example .env
-   # Edit .env and add your OpenAI API key
+   # Edit .env and add your Google API key
    ```
 
    Required in `.env`:
    ```
-   OPENAI_API_KEY=your_openai_api_key_here
+   GOOGLE_API_KEY=your_google_api_key_here
    ```
 
 5. **Run the application:**
@@ -101,7 +101,7 @@ The Skylark Drone Coordinator is a comprehensive AI agent system that helps mana
 2. **Run the container:**
    ```bash
    docker run -p 8501:8501 \
-     -e OPENAI_API_KEY=your_key_here \
+   -e GOOGLE_API_KEY=your_key_here \
      skylark-drone-coordinator
    ```
 
@@ -142,6 +142,11 @@ For real-time collaboration and remote updates:
    PILOT_ROSTER_SHEET_ID=your_pilot_spreadsheet_id
    DRONE_FLEET_SHEET_ID=your_drone_spreadsheet_id
    MISSIONS_SHEET_ID=your_missions_spreadsheet_id
+   ```
+
+   For hosted deployments, you can use JSON directly:
+   ```
+   GOOGLE_SHEETS_CREDENTIALS_JSON={...service account json...}
    ```
 
 5. **Import sample data:**
@@ -254,8 +259,8 @@ When you need to reassign a mission urgently:
 | Component | Technology | Purpose |
 |-----------|-----------|---------|
 | **Frontend** | Streamlit 1.29 | Interactive web UI |
-| **AI Framework** | LangChain 0.1 | Agent orchestration |
-| **LLM** | OpenAI GPT-4 | Natural language understanding |
+| **AI Framework** | LangChain 0.2 | Agent orchestration |
+| **LLM** | Google Gemini | Natural language understanding |
 | **Data** | Pandas 2.1 | Data manipulation |
 | **Cloud Sync** | Google Sheets API | Optional cloud storage |
 | **Backend** | Python 3.9+ | Core logic |
@@ -265,7 +270,7 @@ When you need to reassign a mission urgently:
 
 **Streamlit**: Rapid development of data-rich applications with native chat interface support.
 
-**LangChain + OpenAI**: Industry-standard for building AI agents with function calling, providing robust natural language understanding and tool usage.
+**LangChain + Gemini**: Industry-standard for building AI agents with structured tool routing and strong natural language understanding.
 
 **Google Sheets API**: Enables collaboration and real-time updates without complex database setup.
 
@@ -333,8 +338,9 @@ The AI agent has access to 14 specialized tools:
 1. Push code to GitHub
 2. Go to [share.streamlit.io](https://share.streamlit.io/)
 3. Connect repository
-4. Add secrets (OPENAI_API_KEY) in settings
-5. Deploy
+4. Add secrets (GOOGLE_API_KEY) in settings
+5. If using Google Sheets, add `GOOGLE_SHEETS_CREDENTIALS_JSON` (service account JSON), plus sheet IDs and names
+6. Deploy
 
 ### Replit
 
@@ -416,15 +422,15 @@ The AI agent has access to 14 specialized tools:
 
 ## 🐛 Troubleshooting
 
-**Issue: "OpenAI API key not provided"**
-- Solution: Ensure `OPENAI_API_KEY` is set in `.env` or environment variables
+**Issue: "Google API key not provided"**
+- Solution: Ensure `GOOGLE_API_KEY` is set in `.env` or environment variables
 
 **Issue: "Google Sheets integration disabled"**
 - Solution: Check credentials path and spreadsheet IDs in `.env`
 - Ensure service account has access to sheets
 
 **Issue: Agent not responding**
-- Solution: Check OpenAI API key validity and account balance
+- Solution: Check Google API key validity and quota
 - Verify internet connection
 
 **Issue: Data not updating**
@@ -442,7 +448,7 @@ This is a demonstration project. For questions or issues, please contact the dev
 ## 🙏 Acknowledgments
 
 - Skylark Drones for the problem statement
-- OpenAI for GPT-4 API
+- Google AI Studio (Gemini API)
 - LangChain for agent framework
 - Streamlit for the UI framework
 

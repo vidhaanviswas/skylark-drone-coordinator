@@ -1,6 +1,7 @@
 """Mission data model."""
 
 from dataclasses import dataclass
+import math
 from typing import List, Optional
 from datetime import datetime
 
@@ -24,6 +25,14 @@ class Mission:
     @classmethod
     def from_dict(cls, data: dict) -> 'Mission':
         """Create a Mission instance from a dictionary."""
+        def is_missing(value) -> bool:
+            if value is None:
+                return True
+            if isinstance(value, str) and value.strip().lower() in ["", "nan", "none"]:
+                return True
+            if isinstance(value, float) and math.isnan(value):
+                return True
+            return False
         # Normalize legacy/alternate column names from CSVs.
         if 'mission_id' not in data and 'project_id' in data:
             data['mission_id'] = data.get('project_id')
@@ -46,9 +55,17 @@ class Mission:
         elif isinstance(data.get('required_certifications'), list):
             required_certifications = data['required_certifications']
         
-        # Parse dates
-        start_date = datetime.strptime(str(data['start_date']), '%Y-%m-%d')
-        end_date = datetime.strptime(str(data['end_date']), '%Y-%m-%d')
+        # Parse dates (support multiple formats from Sheets)
+        def parse_date(value: str) -> datetime:
+            for fmt in ("%Y-%m-%d", "%d-%m-%y", "%d-%m-%Y"):
+                try:
+                    return datetime.strptime(value, fmt)
+                except ValueError:
+                    continue
+            raise ValueError(f"Unsupported date format: {value}")
+
+        start_date = parse_date(str(data['start_date']))
+        end_date = parse_date(str(data['end_date']))
         
         priority_value = data.get('priority', 3)
         if isinstance(priority_value, str):
@@ -70,19 +87,19 @@ class Mission:
             start_date=start_date,
             end_date=end_date,
             priority=int(priority_value),
-            assigned_pilot_id=data.get('assigned_pilot_id') or None,
-            assigned_drone_id=data.get('assigned_drone_id') or None,
+            assigned_pilot_id=None if is_missing(data.get('assigned_pilot_id')) else data.get('assigned_pilot_id'),
+            assigned_drone_id=None if is_missing(data.get('assigned_drone_id')) else data.get('assigned_drone_id'),
             status=str(data.get('status', 'Pending'))
         )
     
     def to_dict(self) -> dict:
         """Convert mission to dictionary."""
         return {
-            'mission_id': self.mission_id,
-            'client_name': self.client_name,
+            'project_id': self.mission_id,
+            'client': self.client_name,
             'location': self.location,
             'required_skills': ','.join(self.required_skills),
-            'required_certifications': ','.join(self.required_certifications),
+            'required_certs': ','.join(self.required_certifications),
             'start_date': self.start_date.strftime('%Y-%m-%d'),
             'end_date': self.end_date.strftime('%Y-%m-%d'),
             'priority': self.priority,

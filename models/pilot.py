@@ -1,6 +1,7 @@
 """Pilot data model."""
 
 from dataclasses import dataclass
+import math
 from typing import List, Optional
 from datetime import datetime
 
@@ -25,12 +26,23 @@ class Pilot:
     @classmethod
     def from_dict(cls, data: dict) -> 'Pilot':
         """Create a Pilot instance from a dictionary."""
+        def is_missing(value) -> bool:
+            if value is None:
+                return True
+            if isinstance(value, str) and value.strip().lower() in ["", "nan", "none"]:
+                return True
+            if isinstance(value, float) and math.isnan(value):
+                return True
+            return False
+
         # Normalize legacy/alternate column names from CSVs.
         if 'availability_start_date' not in data and 'available_from' in data:
             data['availability_start_date'] = data.get('available_from')
         if 'availability_end_date' not in data and 'available_to' in data:
             data['availability_end_date'] = data.get('available_to')
-        if data.get('current_assignment') in ['-', '–', '—', '']:
+        if 'availability_start_date' not in data and 'availability' in data:
+            data['availability_start_date'] = data.get('availability')
+        if is_missing(data.get('current_assignment')) or data.get('current_assignment') in ['-', '–', '—', '']:
             data['current_assignment'] = None
 
         # Parse skills and certifications
@@ -67,7 +79,7 @@ class Pilot:
             skills=skills,
             certifications=certifications,
             location=str(data['location']),
-            current_assignment=data.get('current_assignment') or None,
+            current_assignment=None if is_missing(data.get('current_assignment')) else data.get('current_assignment'),
             status=str(data.get('status', 'Available')),
             availability_start_date=start_date,
             availability_end_date=end_date,
@@ -83,12 +95,12 @@ class Pilot:
             'name': self.name,
             'skills': ','.join(self.skills),
             'certifications': ','.join(self.certifications),
+            'drone_experience_hours': self.drone_experience_hours,
             'location': self.location,
             'current_assignment': self.current_assignment or '',
             'status': self.status,
-            'availability_start_date': self.availability_start_date.strftime('%Y-%m-%d') if self.availability_start_date else '',
+            'availability': self.availability_start_date.strftime('%Y-%m-%d') if self.availability_start_date else '',
             'availability_end_date': self.availability_end_date.strftime('%Y-%m-%d') if self.availability_end_date else '',
-            'drone_experience_hours': self.drone_experience_hours,
             'priority_level': self.priority_level,
             'contact_info': self.contact_info
         }

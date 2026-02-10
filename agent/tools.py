@@ -379,12 +379,12 @@ def get_agent_tools(pilot_service, drone_service, mission_service, conflict_dete
         """
         conflicts = []
         
-        if mission_id:
-            conflicts = conflict_detector.check_mission_conflicts(mission_id)
-        elif pilot_id and mission_id:
+        if pilot_id and mission_id:
             conflicts = conflict_detector.check_pilot_conflicts(pilot_id, mission_id)
         elif drone_id and mission_id:
             conflicts = conflict_detector.check_drone_conflicts(drone_id, mission_id)
+        elif mission_id:
+            conflicts = conflict_detector.check_mission_conflicts(mission_id)
         elif pilot_id and drone_id:
             conflicts = conflict_detector.check_pilot_drone_location_match(pilot_id, drone_id)
         

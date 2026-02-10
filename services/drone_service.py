@@ -5,6 +5,8 @@ from typing import List, Optional
 from datetime import datetime
 from models.drone import Drone
 
+_UNSET = object()
+
 
 class DroneService:
     """Service for managing drone fleet operations."""
@@ -83,7 +85,7 @@ class DroneService:
         drone_id: str,
         status: str,
         location: Optional[str] = None,
-        current_assignment: Optional[str] = None
+        current_assignment: Optional[str] = _UNSET
     ) -> bool:
         """
         Update drone status.
@@ -104,7 +106,7 @@ class DroneService:
         drone.status = status
         if location:
             drone.location = location
-        if current_assignment is not None:
+        if current_assignment is not _UNSET:
             drone.current_assignment = current_assignment
         
         return self.save_drones()

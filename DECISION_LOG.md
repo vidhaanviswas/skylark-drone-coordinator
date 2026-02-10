@@ -33,10 +33,10 @@ This document captures key architectural decisions, trade-offs, and implementati
 
 ### Tech Stack Choices
 
-**✅ LangChain + OpenAI GPT-4**
-- **Chosen because**: Industry-standard for AI agents, robust function calling, excellent natural language understanding
-- **Trade-off**: Requires OpenAI API key (cost), network dependency, latency (2-5 seconds per query)
-- **Alternative considered**: Local LLMs (LLaMA, Mistral) - rejected due to complexity and lower accuracy for function calling
+**✅ LangChain + Google Gemini**
+- **Chosen because**: Strong multilingual reasoning, easy API access for students, good performance on tool routing
+- **Trade-off**: Requires Google API key (cost), network dependency, latency (2-5 seconds per query)
+- **Alternative considered**: Local LLMs (LLaMA, Mistral) - rejected due to complexity and lower accuracy for structured tool routing
 
 **✅ Streamlit**
 - **Chosen because**: Rapid development, native chat interface, data visualization, Python-native
@@ -138,7 +138,7 @@ This document captures key architectural decisions, trade-offs, and implementati
    - Conflict detection test suite covering all edge cases
 
 2. **Better Error Handling**
-   - Graceful degradation when OpenAI API fails
+   - Graceful degradation when Google API fails
    - Retry logic with exponential backoff
    - Better error messages in UI
    - Validation of CSV data on load (schema checking)

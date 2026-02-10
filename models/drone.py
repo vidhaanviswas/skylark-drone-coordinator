@@ -1,6 +1,7 @@
 """Drone data model."""
 
 from dataclasses import dataclass
+import math
 from typing import List, Optional
 from datetime import datetime
 
@@ -22,10 +23,19 @@ class Drone:
     @classmethod
     def from_dict(cls, data: dict) -> 'Drone':
         """Create a Drone instance from a dictionary."""
+        def is_missing(value) -> bool:
+            if value is None:
+                return True
+            if isinstance(value, str) and value.strip().lower() in ["", "nan", "none"]:
+                return True
+            if isinstance(value, float) and math.isnan(value):
+                return True
+            return False
+
         # Normalize legacy/alternate column names from CSVs.
         if 'maintenance_due_date' not in data and 'maintenance_due' in data:
             data['maintenance_due_date'] = data.get('maintenance_due')
-        if data.get('current_assignment') in ['-', '–', '—', '']:
+        if is_missing(data.get('current_assignment')) or data.get('current_assignment') in ['-', '–', '—', '']:
             data['current_assignment'] = None
 
         # Parse capabilities
@@ -47,7 +57,7 @@ class Drone:
             drone_id=str(data['drone_id']),
             model=str(data['model']),
             capabilities=capabilities,
-            current_assignment=data.get('current_assignment') or None,
+            current_assignment=None if is_missing(data.get('current_assignment')) else data.get('current_assignment'),
             status=str(data.get('status', 'Available')),
             location=str(data['location']),
             maintenance_due_date=maintenance_date,
@@ -64,6 +74,7 @@ class Drone:
             'current_assignment': self.current_assignment or '',
             'status': self.status,
             'location': self.location,
+            'maintenance_due': self.maintenance_due_date.strftime('%Y-%m-%d') if self.maintenance_due_date else '',
             'maintenance_due_date': self.maintenance_due_date.strftime('%Y-%m-%d') if self.maintenance_due_date else '',
             'flight_hours': self.flight_hours,
             'max_range_km': self.max_range_km

@@ -1,5 +1,5 @@
-pilot_id,name,skills,certifications,location,status,current_assignment,available_from
-P001,Arjun,"Mapping, Survey","DGCA, Night Ops",Bangalore,Available,–,2026-02-05
-P002,Neha,Inspection,DGCA,Mumbai,Assigned,Project-A,2026-02-12
-P003,Rohit,"Inspection, Mapping",DGCA,Mumbai,Available,–,2026-02-05
-P004,Sneha,"Survey, Thermal","DGCA, Night Ops",Bangalore,On Leave,–,2026-02-15
+pilot_id,name,skills,certifications,drone_experience_hours,location,current_assignment,status,availability,availability_end_date,priority_level,contact_info
+P001,Arjun,"Mapping,Survey","DGCA,Night Ops",1,Bangalore,PRJ001,Assigned,2026-02-08,,3,arjun@skylark.com
+P002,Neha,Inspection,DGCA,2,Mumbai,,Assigned,,,3,arjun@skylark.com
+P003,Rohit,"Inspection,Mapping",DGCA,3,Mumbai,,Available,,,3,arjun@skylark.com
+P004,Sneha,"Survey,Thermal","DGCA,Night Ops",4,Bangalore,,Available,,,3,arjun@skylark.com

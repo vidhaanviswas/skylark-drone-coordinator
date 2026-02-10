@@ -74,7 +74,8 @@ class ConflictDetector:
                 })
         
         # Check skill requirements
-        missing_skills = [s for s in mission.required_skills if s not in pilot.skills]
+        pilot_skills = [s.lower() for s in pilot.skills]
+        missing_skills = [s for s in mission.required_skills if s.lower() not in pilot_skills]
         if missing_skills:
             conflicts.append({
                 'type': 'SKILL_MISMATCH',
@@ -86,7 +87,8 @@ class ConflictDetector:
             })
         
         # Check certification requirements
-        missing_certs = [c for c in mission.required_certifications if c not in pilot.certifications]
+        pilot_certs = [c.lower() for c in pilot.certifications]
+        missing_certs = [c for c in mission.required_certifications if c.lower() not in pilot_certs]
         if missing_certs:
             conflicts.append({
                 'type': 'CERTIFICATION_MISMATCH',

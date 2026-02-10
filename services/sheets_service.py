@@ -1,6 +1,7 @@
 """Google Sheets integration service."""
 
 import os
+import json
 from typing import Optional, List, Dict, Any
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
@@ -28,6 +29,7 @@ class SheetsService:
             mission_sheet_id: Spreadsheet ID for missions
         """
         self.credentials_path = credentials_path or os.getenv('GOOGLE_SHEETS_CREDENTIALS_PATH')
+        self.credentials_json = os.getenv('GOOGLE_SHEETS_CREDENTIALS_JSON')
         self.pilot_sheet_id = pilot_sheet_id or os.getenv('PILOT_ROSTER_SHEET_ID')
         self.drone_sheet_id = drone_sheet_id or os.getenv('DRONE_FLEET_SHEET_ID')
         self.mission_sheet_id = mission_sheet_id or os.getenv('MISSIONS_SHEET_ID')
@@ -40,7 +42,14 @@ class SheetsService:
         self.enabled = False
         
         # Only initialize if credentials are available
-        if self.credentials_path and os.path.exists(self.credentials_path):
+        if self.credentials_json:
+            try:
+                self._initialize_service(credentials_json=self.credentials_json)
+                self.enabled = True
+            except Exception as e:
+                print(f"Google Sheets integration disabled: {e}")
+                self.enabled = False
+        elif self.credentials_path and os.path.exists(self.credentials_path):
             try:
                 self._initialize_service()
                 self.enabled = True
@@ -48,14 +57,21 @@ class SheetsService:
                 print(f"Google Sheets integration disabled: {e}")
                 self.enabled = False
     
-    def _initialize_service(self):
+    def _initialize_service(self, credentials_json: Optional[str] = None):
         """Initialize the Google Sheets API service."""
         SCOPES = ['https://www.googleapis.com/auth/spreadsheets']
-        
-        credentials = service_account.Credentials.from_service_account_file(
-            self.credentials_path,
-            scopes=SCOPES
-        )
+
+        if credentials_json:
+            credentials_info = json.loads(credentials_json)
+            credentials = service_account.Credentials.from_service_account_info(
+                credentials_info,
+                scopes=SCOPES
+            )
+        else:
+            credentials = service_account.Credentials.from_service_account_file(
+                self.credentials_path,
+                scopes=SCOPES
+            )
         
         self.service = build('sheets', 'v4', credentials=credentials)
     
@@ -85,7 +101,17 @@ class SheetsService:
                 return None
             
             # First row is headers
-            df = pd.DataFrame(values[1:], columns=values[0])
+            headers = values[0]
+            rows = values[1:]
+            normalized_rows = []
+            for row in rows:
+                if len(row) < len(headers):
+                    row = row + [""] * (len(headers) - len(row))
+                elif len(row) > len(headers):
+                    row = row[:len(headers)]
+                normalized_rows.append(row)
+
+            df = pd.DataFrame(normalized_rows, columns=headers)
             return df
         
         except HttpError as e:
@@ -114,7 +140,8 @@ class SheetsService:
         
         try:
             # Convert DataFrame to list of lists
-            values = [data.columns.tolist()] + data.values.tolist()
+            safe_data = data.fillna("")
+            values = [safe_data.columns.tolist()] + safe_data.values.tolist()
             
             body = {'values': values}
             
@@ -216,6 +243,28 @@ class SheetsService:
         data = [drone.to_dict() for drone in drone_service.get_all_drones()]
         df = pd.DataFrame(data)
         return self.write_sheet(self.drone_sheet_id, self.drone_sheet_name, df)
+
+    def sync_missions_from_sheets(self, mission_service) -> bool:
+        """
+        Sync mission data from Google Sheets to local CSV.
+
+        Args:
+            mission_service: MissionService instance
+
+        Returns:
+            True if successful, False otherwise
+        """
+        if not self.enabled or not self.mission_sheet_id:
+            return False
+
+        df = self.read_sheet(self.mission_sheet_id, self.mission_sheet_name)
+        if df is None:
+            return False
+
+        # Save to CSV
+        df.to_csv(mission_service.csv_path, index=False)
+        mission_service.load_missions()
+        return True
     
     def sync_missions_to_sheets(self, mission_service) -> bool:
         """

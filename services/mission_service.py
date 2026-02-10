@@ -82,7 +82,8 @@ class MissionService:
             return {'success': False, 'message': f'Pilot {pilot_id} not found'}
         
         # Validate pilot has required skills
-        missing_skills = [s for s in mission.required_skills if s not in pilot.skills]
+        pilot_skills = [s.lower() for s in pilot.skills]
+        missing_skills = [s for s in mission.required_skills if s.lower() not in pilot_skills]
         if missing_skills:
             return {
                 'success': False,
@@ -90,7 +91,8 @@ class MissionService:
             }
         
         # Validate pilot has required certifications
-        missing_certs = [c for c in mission.required_certifications if c not in pilot.certifications]
+        pilot_certs = [c.lower() for c in pilot.certifications]
+        missing_certs = [c for c in mission.required_certifications if c.lower() not in pilot_certs]
         if missing_certs:
             return {
                 'success': False,
@@ -135,10 +137,13 @@ class MissionService:
         
         # Check if drone has required capabilities
         # For simplicity, we'll match at least one required skill to a capability
-        has_capability = any(
-            skill.lower() in ' '.join(drone.capabilities).lower()
-            for skill in mission.required_skills
-        )
+        if not mission.required_skills:
+            has_capability = True
+        else:
+            has_capability = any(
+                skill.lower() in ' '.join(drone.capabilities).lower()
+                for skill in mission.required_skills
+            )
         
         if not has_capability:
             return {
