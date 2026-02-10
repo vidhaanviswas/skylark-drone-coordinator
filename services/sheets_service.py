@@ -51,7 +51,10 @@ class SheetsService:
         # Priority: Streamlit secrets -> env
         if SECRETS:
             service_account_info = SECRETS.get("gcp_service_account")
-            if service_account_info:
+            credentials_json_secret = SECRETS.get("GOOGLE_SHEETS_CREDENTIALS_JSON")
+            if credentials_json_secret:
+                self.credentials_json = credentials_json_secret
+            elif service_account_info:
                 if isinstance(service_account_info, str):
                     self.credentials_json = service_account_info
                 else:
@@ -59,6 +62,9 @@ class SheetsService:
             self.pilot_sheet_id = pilot_sheet_id or SECRETS.get("PILOT_ROSTER_SHEET_ID")
             self.drone_sheet_id = drone_sheet_id or SECRETS.get("DRONE_FLEET_SHEET_ID")
             self.mission_sheet_id = mission_sheet_id or SECRETS.get("MISSIONS_SHEET_ID")
+            self.pilot_sheet_name = SECRETS.get("PILOT_ROSTER_SHEET_NAME", self.pilot_sheet_name)
+            self.drone_sheet_name = SECRETS.get("DRONE_FLEET_SHEET_NAME", self.drone_sheet_name)
+            self.mission_sheet_name = SECRETS.get("MISSIONS_SHEET_NAME", self.mission_sheet_name)
         else:
             self.credentials_json = os.getenv('GOOGLE_SHEETS_CREDENTIALS_JSON')
             self.pilot_sheet_id = pilot_sheet_id or os.getenv('PILOT_ROSTER_SHEET_ID')
