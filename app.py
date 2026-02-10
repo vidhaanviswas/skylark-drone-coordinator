@@ -78,15 +78,10 @@ def initialize_services():
     conflict_detector = ConflictDetector(pilot_service, drone_service, mission_service)
     sheets_service = SheetsService()
 
-    if not sheets_service.enabled:
-        raise RuntimeError("Google Sheets is required but not connected.")
-
-    pilots_ok = sheets_service.sync_pilots_from_sheets(pilot_service)
-    drones_ok = sheets_service.sync_drones_from_sheets(drone_service)
-    missions_ok = sheets_service.sync_missions_from_sheets(mission_service)
-    if not (pilots_ok and drones_ok and missions_ok):
-        detail = sheets_service.last_error or "Unknown error."
-        raise RuntimeError(f"Failed to load data from Google Sheets: {detail}")
+    if sheets_service.enabled:
+        sheets_service.sync_pilots_from_sheets(pilot_service)
+        sheets_service.sync_drones_from_sheets(drone_service)
+        sheets_service.sync_missions_from_sheets(mission_service)
     
     return pilot_service, drone_service, mission_service, conflict_detector, sheets_service
 
