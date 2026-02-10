@@ -79,9 +79,6 @@ class SheetsService:
             print(f"Google Sheets integration disabled: {e}")
             self.enabled = False
 
-        print("Sheets enabled:", self.enabled)
-        print("Credentials present:", bool(self.credentials_json))
-
     
     def _initialize_service(self, credentials_json: Optional[str] = None):
         """Initialize the Google Sheets API service."""
