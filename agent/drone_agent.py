@@ -48,7 +48,8 @@ class DroneCoordinatorAgent:
         self.llm = ChatGoogleGenerativeAI(
             model="models/gemini-flash-latest",
             temperature=0,
-            google_api_key=self.api_key
+            google_api_key=self.api_key,
+            max_retries=0
         )
         
         # Get tools
@@ -184,7 +185,13 @@ class DroneCoordinatorAgent:
             return response
         
         except Exception as e:
-            error_msg = f"I encountered an error: {str(e)}"
+            error_text = str(e)
+            if "ResourceExhausted" in error_text or "429" in error_text:
+                return (
+                    "Gemini API quota exceeded for this key. "
+                    "Please wait for quota reset or use a different key."
+                )
+            error_msg = f"I encountered an error: {error_text}"
             print(f"Agent error: {e}")
             return error_msg
     
