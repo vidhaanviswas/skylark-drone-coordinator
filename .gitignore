@@ -47,6 +47,10 @@ token.json
 tmp/
 *.log
 
+# Test files (for development only)
+test_system.py
+test_edge_cases.py
+
 # OS
 .DS_Store
 Thumbs.db
