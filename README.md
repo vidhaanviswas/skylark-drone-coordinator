@@ -6,8 +6,11 @@
 
 An AI-powered drone operations coordination system for Skylark Drones, handling pilot roster management, drone fleet tracking, mission assignments, and conflict detection.
 
-## 🚀 Live Demo
-👉 **[Click here to open Skylark Drone](https://skylark-drone.streamlit.app/)**
+<p align="center">
+  <a href="https://skylark-drone.streamlit.app/">
+    <img src="https://img.shields.io/badge/Launch-Skylark%20Drone-App-blue?style=for-the-badge" />
+  </a>
+</p>
 
 
 ## 🚁 Overview
