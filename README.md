@@ -8,10 +8,9 @@ An AI-powered drone operations coordination system for Skylark Drones, handling 
 
 <p align="center">
   <a href="https://skylark-drone.streamlit.app/">
-    <img src="https://img.shields.io/badge/Launch-Skylark%20Drone-App-blue?style=for-the-badge" />
+    <img src="https://static.streamlit.io/badges/streamlit_badge_black_white.svg" alt="Open in Streamlit"/>
   </a>
 </p>
-
 
 ## 🚁 Overview
 
